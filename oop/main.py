@@ -1,7 +1,10 @@
+import datetime
+
+
 class Employee:
 
     num_of_emps = 0
-    raise_amount = 1.04
+    raise_amt = 1.04
 
     def __init__(self, first, last, pay):
         self.first = first
@@ -15,11 +18,27 @@ class Employee:
         return "{} {}".format(emp_1.first, emp_1.last)
 
     def apply_raise(self):
-        self.pay = int(float(self.pay) * self.raise_amount)
+        self.pay = int(float(self.pay) * self.raise_amt)
 
-print(Employee.num_of_emps)
+    @classmethod
+    def set_raise_amt(cls, amount):
+        cls.raise_amt = amount
+
+    @classmethod
+    def from_string(cls, emp_str):
+        first, last, pay = emp_str.split("-")
+        return cls(first, last, pay)
+
+    @staticmethod
+    def is_workday(day):
+        if day.weekday() > 4:
+            return False
+        return True
+
 
 emp_1 = Employee("Benjamin", "McGregor", "50000")
 emp_2 = Employee("Test", "Tester", "60000")
 
-print(Employee.num_of_emps)
+my_date = datetime.date(2020, 8, 8)
+
+print(Employee.is_workday(my_date))
