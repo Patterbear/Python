@@ -1,9 +1,5 @@
-import datetime
-
-
 class Employee:
 
-    num_of_emps = 0
     raise_amt = 1.04
 
     def __init__(self, first, last, pay):
@@ -12,33 +8,48 @@ class Employee:
         self.pay = pay
         self.email = first + "." + last + "@company.com"
 
-        Employee.num_of_emps += 1
 
     def fullname(self):
-        return "{} {}".format(emp_1.first, emp_1.last)
+        return "{} {}".format(self.first, self.last)
 
     def apply_raise(self):
         self.pay = int(float(self.pay) * self.raise_amt)
 
-    @classmethod
-    def set_raise_amt(cls, amount):
-        cls.raise_amt = amount
 
-    @classmethod
-    def from_string(cls, emp_str):
-        first, last, pay = emp_str.split("-")
-        return cls(first, last, pay)
+class Developer(Employee):
+    raise_amt = 1.10
 
-    @staticmethod
-    def is_workday(day):
-        if day.weekday() > 4:
-            return False
-        return True
+    def __init__(self, first, last, pay, prog_lang):
+        super().__init__(first, last, pay)
+        self.prog_lang = prog_lang
 
 
-emp_1 = Employee("Benjamin", "McGregor", "50000")
-emp_2 = Employee("Test", "Tester", "60000")
+class Manager(Employee):
 
-my_date = datetime.date(2020, 8, 8)
+    def __init__(self, first, last, pay, employees=None):
+        super().__init__(first, last, pay)
+        if employees is None:
+            self.employees = []
+        else:
+            self.employees = employees
 
-print(Employee.is_workday(my_date))
+    def add_employee(self, emp):
+        if emp not in self.employees:
+            self.employees.append(emp)
+
+    def remove_emp(self, emp):
+        if emp in self.employees:
+            self.employees.remove(emp)
+
+    def print_emps(self):
+        for emp in self.employees:
+            print("-->", emp.fullname())
+
+
+dev_1 = Developer("Benjamin", "McGregor", "50000", "Java")
+dev_2 = Developer("Test", "Tester", "60000", "Python")
+
+mgr_1 = Manager("Manny", "Manager", 90000, [dev_1])
+
+
+print(issubclass(Manager, Developer))
